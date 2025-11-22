@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Вход</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f0f0f0;
+        }
+
+        .form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px
+            solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #2196F3;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h2> Создание</h2>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Ваш логин" required>
+            <input type="password" name="password" placeholder="Ваш пароль" required>
+            <button type="submit">Войти</button>
+        </form>
+        <a href="/" class="back">Войти под гостем</a>
+    </div>
+</body>
+</html>
