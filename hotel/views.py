@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
-from .models import Service, Guest
+from .models import Service, Guest, Room
 from django.db.models import Q
 
 
@@ -65,3 +65,16 @@ def clients(request):
 def user_logout(request):
     logout(request)
     return redirect('service')
+
+def nomerfond(request):
+    rooms = Room.objects.all().select_related('category')
+    filt = request.GET.get('search', '')
+    catfilt = request.GET.get('cate', '')
+    if catfilt:
+        rooms = rooms.filter(category=int(catfilt))
+    if filt:
+        rooms = rooms.filter(count_room=int(filt))
+    return render(request, 'nomer.html',{
+            'rooms': rooms,
+            'filt': filt
+            })

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Номерной фонд</title>
+</head>
+<style>
+         body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+
+        header{
+            background: #2c3e50;
+            color: white;
+            padding: 15px 0;
+        }
+        .pozitions{
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h2{
+            margin: 10px;
+            font-size: 28px;
+        }
+
+        .navigazia{
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+        .silci{
+            color: white;
+            text-decoration: none;
+        }
+
+        .disconect{
+            color: #e74c3c;
+            text-decoration: none;
+        }
+  .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .client-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .client-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .client-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .client-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-label {
+            font-weight: bold;
+        }
+
+        a{
+          text-decoration: none;
+          color: black;
+        }
+    </style>
+<header>
+    <div class="pozitions">
+        <div>
+            <h2>Отель</h2>
+        </div>
+        <nav>
+            <ul class="navigazia">
+                <li><a href="{% url 'service' %}" class="silci">Главная</a></li>
+                <li><a href="{% url 'user_logout' %}" class="disconect">Выйти</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<body>
+  <h1>Номерной фонд</h1>
+  <form method="get">
+    <select name="search">
+      <option value="">All</option>
+      <option value="1" {% if filt == '1' %} selected {% endif %}> 1-комнатные</option>
+      <option value="2" {% if filt == '2' %} selected {% endif %}> 2-комнатные</option>
+      <option value="3" {% if filt == '3' %} selected {% endif %}> 3-комнатные</option>
+      <option value="4" {% if filt == '4' %} selected {% endif %}> 4-комнатные</option>
+    </select>
+    <select name="cate">
+      <option value="">All</option>
+      <option value="1" {% if catfilt == '1' %} selected {% endif %}> Люкс</option>
+    </select>
+  <button type="submit">Применить</button>
+    {% if filt %}
+    <button type="submit"><a href="{% url 'nomerfond' %}" >Сброс</a></button>
+    {% endif %}
+</form>
+
+      <div class="clients-grid">
+        {% for rooms in rooms %}
+          <div class="client-card">
+                <div class="client-header">
+                    <h3 class="client-name">{{ rooms.category }}</h3>
+                </div>
+
+
+            <div class="client-info">
+                    <div class="info-row">
+                        <span class="info-label">Этаж:</span>
+                        <span>{{ rooms.floor }}</span>
+                    </div>
+            </div>
+            <div class="info-row">
+                        <span class="info-label">Количество комнат:</span>
+                        <span>{{ rooms.count_room }}</span>
+                    </div>
+            <div class="info-row">
+                        <span class="info-label">Количество спальных мест:</span>
+                        <span>{{ rooms.sleep_count }}</span>
+                    </div>
+          </div>
+
+        {% endfor %}
+</body>
+</html>
