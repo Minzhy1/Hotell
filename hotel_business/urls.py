@@ -7,5 +7,6 @@ urlpatterns = [
     path('service/', views.home, name='service'),
     path('clients/', views.clients, name='clients'),
     path('', views.user_logout, name='user_logout'),
-    path('nomer/', views.nomerfond, name = 'nomerfond')
+    path('nomer/', views.nomerfond, name = 'nomerfond'),
+    path('book-service/', views.book_service, name='book_service')
 ]

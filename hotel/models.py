@@ -74,9 +74,14 @@ class Service(models.Model):
 
 # Оказание услуг
 class ProvisionService(models.Model):
-    bron = models.ForeignKey(Bron, on_delete=models.CASCADE)
+    bron = models.ForeignKey(Bron, on_delete=models.CASCADE, null=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     decimal = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     def __str__(self):
         return self.bron
+
+
+
+
+
