@@ -1,49 +1,71 @@
 {% load static %}
+{% load discount_tags %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Услуги отеля</title>
     <link rel="stylesheet" href="{% static 'servicstyle.css' %}">
 </head>
-<header>
-    <div class="pozitions">
-        <div>
-            <h2>Отель</h2>
-        </div>
-
-        <nav>
-            <ul class="navigazia">
-                <li><a href="{% url 'clients' %}" class="silci">Клиенты</a></li>
-                <li><a href="{% url 'nomerfond' %}"class="silci">Номерной фонд</a></li>
-                <li><a href="{% url 'book_service' %}"class="silci">Запись на услугу</a></li>
-                <li><a href="{% url 'user_logout' %}" class="disconect">Выйти</a></li>
-            </ul>
-        </nav>
-
-    </div>
-</header>
-
 <body>
+    <header>
+        <div class="pozitions">
+            <div>
+                <h2>Отель</h2>
+            </div>
+
+            <nav>
+                <ul class="navigazia">
+                    <li><a href="{% url 'clients' %}" class="silci">Клиенты</a></li>
+                    <li><a href="{% url 'nomerfond' %}"class="silci">Номерной фонд</a></li>
+                    <li><a href="{% url 'book_service' %}"class="silci">Запись на услугу</a></li>
+                    <li><a href="{% url 'user_logout' %}" class="disconect">Выйти</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
     <div style="text-align: center">
         <h1>Услуги отеля</h1>
         <p>Выберите дополнительные услуги для комфортного проживания</p>
     </div>
-     <form method="GET" action="" class="search-form">
+
+    <form method="GET" action="" class="search-form">
         <input type="text" name="search" placeholder="Введите название услуги..." value="{{ search_service }}">
         <button type="submit" class="search-btn">Найти</button>
-         <div class="services">
-        {% if search_service %}
-            <h2>Результаты поиска по "{{ search_service }}":</h2>
-        {% endif %}
-         </div>
+    </form>
+
+    {% if search_service %}
+        <h2 style="text-align: center;">Результаты поиска по "{{ search_service }}":</h2>
+    {% endif %}
+
+    {% with guest_discount=10 %}
+
     <div class="services-grid">
         {% for service in services %}
-        <div class="service-card">
+        <div class="service-card"
+            {% if not service.is_available %}
+                style="background-color: #CFCFCF;"
+            {% elif guest_discount|is_high_discount %}
+                style="background-color: #98fadd;"
+            {% endif %}>
+
             <div class="service-title">{{ service.title }}</div>
-            <div class="service-price">{{ service.price }} ₽</div>
+
+            <div class="service-price">
+                {% if guest_discount > 0 %}
+                    <span style="text-decoration: line-through; color: #777;">{{ service.price }} ₽</span>
+                    <span style="color: red; font-weight: bold;">{{ service.price|apply_discount:guest_discount }} ₽</span>
+                {% else %}
+                    {{ service.price }} ₽
+                {% endif %}
+            </div>
+
             <div class="service-description">{{ service.description }}</div>
         </div>
         {% endfor %}
     </div>
+
+    {% endwith %}
 </body>
 </html>

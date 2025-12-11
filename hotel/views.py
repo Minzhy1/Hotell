@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Service, Guest, Room, Bron, ProvisionService
+from .models import Service, Guest, Room, Bron
 from django.db.models import Q
 import datetime
 
@@ -63,7 +63,6 @@ def clients(request):
         'cliens': cliens
     })
 
-# Выход
 def user_logout(request):
     logout(request)
     return redirect('service')
@@ -81,7 +80,6 @@ def nomerfond(request):
             'filt': filt
             })
 
-
 def book_service(request):
     guests = Guest.objects.all()
     services = Service.objects.all()
@@ -92,7 +90,6 @@ def book_service(request):
             service_id = request.POST.get('service')
             booking_date = request.POST.get('booking_date')
 
-            # Проверяем заполнение даты
             if not booking_date:
                 messages.error(request, "Пожалуйста, выберите дату")
                 return redirect('book_service')
@@ -100,16 +97,7 @@ def book_service(request):
             guest = Guest.objects.get(id=guest_id)
             service = Service.objects.get(id=service_id)
 
-            # Ищем первую бронь (или создаем фиктивную)
             bron = Bron.objects.first()
-
-            # Создаем запись на услугу
-            booking = ProvisionService.objects.create(
-                bron=bron,
-                service=service,
-                decimal=service.price,
-                date=booking_date
-            )
 
             messages.success(request, f'✅ Услуга "{service.title}" записана для {guest.fio} на {booking_date}')
             return redirect('book_service')
